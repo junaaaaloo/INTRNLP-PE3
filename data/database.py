@@ -25,7 +25,7 @@ def create_table_string (table_data, table_name):
     message += "("
     for column_name in table_data['columns']:
         column_data = table_data['columns'][column_name]
-        message += "{} {}{}".format(column_name, column_data['type'], (" PRIMARY KEY" if hasattr(column_data, "primary_key") else ""))
+        message += "{} {}{}".format(column_name, column_data['type'], (" PRIMARY KEY" if 'primary_key' in column_data else ""))
         column_count += 1
         if (column_count != len(table_data['columns'])):
             message += ", "
@@ -35,12 +35,12 @@ def create_table_string (table_data, table_name):
     return message
 
 def create_database ():
-    # connection = sqlite3.connect("data.sqlite")
-    # cursor = conenction.cursor()
+    connection = sqlite3.connect("sqlite3.db")
+    cursor = conenction.cursor()
     
     for table_name in tables:
         table_data = tables[table_name]
-        print(create_table_string(table_data, table_name))
+        string_query = (create_table_string(table_data, table_name))
 
 create_database() 
 
