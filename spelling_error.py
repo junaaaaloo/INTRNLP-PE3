@@ -1,4 +1,3 @@
-import tkinter as tk
 from collections import Counter
 import re
 import os
