@@ -1,11 +1,15 @@
 from collections import Counter
 import re
 import os
+from time import time
 
-def log (message):
-    print("[{}] {}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.time()), message))
 
-def load_corpus (directory):
+def log(message):
+    print("[{}] {}".format(time.strftime(
+        "%Y-%m-%d %H:%M:%S", time.time()), message))
+
+
+def load_corpus(directory):
     text_files = []
     term_counter = Counter()
 
@@ -20,9 +24,11 @@ def load_corpus (directory):
                     "Title": title,
                     "Raw Text": f.read()
                 }
-                temp['Tokens'] = re.findall(re_pattern, temp["Raw Text"].lower())
-                temp['Vocabulary'] = list(set(re.findall(re_pattern, temp["Raw Text"].lower())))
-                
+                temp['Tokens'] = re.findall(
+                    re_pattern, temp["Raw Text"].lower())
+                temp['Vocabulary'] = list(
+                    set(re.findall(re_pattern, temp["Raw Text"].lower())))
+
                 print("===%s===" % title)
                 print("Total tokens: %s" % len(temp['Tokens']))
                 print("Total vocabulary: %s" % len(temp['Vocabulary']))
@@ -32,6 +38,7 @@ def load_corpus (directory):
     log("Loading corpus: Done!")
     return text_files, term_counter
 
+
 def identify_vocabulary(text_files):
     total_vocabulary = set()
     for song in text_files:
@@ -39,7 +46,3 @@ def identify_vocabulary(text_files):
     total_vocabulary = list(total_vocabulary)
     print("Vocabulary count: {}".format(len(total_vocabulary)))
     return total_vocabulary
-
-
-
-
