@@ -37,3 +37,5 @@ def edits2(word):
 
 w = input("Input: ")
 print(correction(w))
+print(candidates(w))
+print(P(w))
