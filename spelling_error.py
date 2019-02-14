@@ -5,15 +5,16 @@ from time import time
 
 
 def log(message):
-    print("[{}] {}".format(time.strftime(
-        "%Y-%m-%d %H:%M:%S", time.time()), message))
+    print("[{}] {}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.time()), message))
 
 
 def load_corpus(directory):
     text_files = []
     term_counter = Counter()
 
-    log("Loading corpus")
+    print("Loading corpus")
+    re_pattern = r'\b[a-zA-Z0-9\-\'\*]+\b|[\.\?\!]'
+    
     for folder in directory:
         file_names = os.listdir(folder)
 
@@ -35,7 +36,7 @@ def load_corpus(directory):
 
                 text_files.append(temp)
                 term_counter.update(temp['Tokens'])
-    log("Loading corpus: Done!")
+    print("Loading corpus: Done!")
     return text_files, term_counter
 
 
@@ -46,3 +47,26 @@ def identify_vocabulary(text_files):
     total_vocabulary = list(total_vocabulary)
     print("Vocabulary count: {}".format(len(total_vocabulary)))
     return total_vocabulary
+
+w = input("Input: ")
+
+directory = [
+    #"data/corpus/Joji's BALLAD Song Lyrics",
+    #"data/corpus/Duturte's Speeches",
+    #"data/corpus/DLSU Student Publications",
+    #"data/corpus/Journal Articles"
+    "data/corpus/LSCS"
+]
+
+text_files, term_counter = load_corpus(directory)
+
+total_vocabulary = identify_vocabulary(text_files)
+
+print("Output: ")
+
+if w in total_vocabulary:
+    print("No error")
+else:
+    print("Error")
+
+
