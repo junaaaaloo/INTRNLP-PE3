@@ -7,12 +7,11 @@ from time import time
 def log(message):
     print("[{}] {}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.time()), message))
 
-
 def load_corpus(directory):
     text_files = []
     term_counter = Counter()
 
-    print("Loading corpus")
+    # print("Loading corpus")
     re_pattern = r'\b[a-zA-Z0-9\-\'\*]+\b|[\.\?\!]'
     
     for folder in directory:
@@ -30,13 +29,13 @@ def load_corpus(directory):
                 temp['Vocabulary'] = list(
                     set(re.findall(re_pattern, temp["Raw Text"].lower())))
 
-                print("===%s===" % title)
-                print("Total tokens: %s" % len(temp['Tokens']))
-                print("Total vocabulary: %s" % len(temp['Vocabulary']))
+                # print("===%s===" % title)
+                # print("Total tokens: %s" % len(temp['Tokens']))
+                # print("Total vocabulary: %s" % len(temp['Vocabulary']))
 
                 text_files.append(temp)
                 term_counter.update(temp['Tokens'])
-    print("Loading corpus: Done!")
+    # print("Loading corpus: Done!")
     return text_files, term_counter
 
 
@@ -45,7 +44,7 @@ def identify_vocabulary(text_files):
     for song in text_files:
         total_vocabulary |= set(song['Vocabulary'])
     total_vocabulary = list(total_vocabulary)
-    print("Vocabulary count: {}".format(len(total_vocabulary)))
+    # print("Vocabulary count: {}".format(len(total_vocabulary)))
     return total_vocabulary
 
 def correction(word): 
@@ -54,7 +53,7 @@ def correction(word):
 
 def candidates(word): 
     "Generate possible spelling corrections for word."
-    return (known([word]) or known(edits1(word)) or known(edits2(word)) or [word])
+    return (known([word]) or known(edits1(word)) or [word])
 
 def known(words): 
     "The subset of `words` that appear in the dictionary of WORDS."
@@ -70,9 +69,9 @@ def edits1(word):
     inserts    = [L + c + R               for L, R in splits for c in letters]
     return set(deletes + transposes + replaces + inserts)
 
-def edits2(word): 
-    "All edits that are two edits away from `word`."
-    return (e2 for e1 in edits1(word) for e2 in edits1(e1))
+# def edits2(word):
+#     "All edits that are two edits away from `word`."
+#     return (e2 for e1 in edits1(word) for e2 in edits1(e1))
 
 w = input("Input: ")
 
