@@ -36,6 +36,7 @@ def edits2(word):
     return (e2 for e1 in edits1(word) for e2 in edits1(e1))
 
 w = input("Input: ")
+print(type(WORDS))
 print(correction(w))
 print(candidates(w))
 print(P(w))
