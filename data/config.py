@@ -1,6 +1,6 @@
 DATABASE = "sqlite3.db"
 TABLES = {
-    'vocabulary': {
+    'corpus': {
         'columns': {
             'id': {"type": 'INTEGER', "primary_key": True},
             'name': {"type": 'TEXT'},
