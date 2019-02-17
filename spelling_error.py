@@ -1,17 +1,20 @@
 from collections import Counter
 import re
 import os
-from time import time
+import datetime
+import time
 
-def log(message):
-    print("[{}] {}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.time()), message))
-
+DEBUG = False
+def log(message, debug_bypass = False):
+    global DEBUG;
+    if (DEBUG and not debug_bypass):
+        print("[{}] {}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), message))
 
 def load_corpus(directory):
     text_files = []
     term_counter = Counter()
 
-    # print("Loading corpus")
+    log("Loading corpus")
     re_pattern = r'\b[a-zA-Z0-9\-\'\*]+\b|[\.\?\!]'
 
     for folder in directory:
@@ -29,13 +32,14 @@ def load_corpus(directory):
                 temp['Vocabulary'] = list(
                     set(re.findall(re_pattern, temp["Raw Text"].lower())))
 
-                # print("===%s===" % title)
-                # print("Total tokens: %s" % len(temp['Tokens']))
-                # print("Total vocabulary: %s" % len(temp['Vocabulary']))
+                log("===%s===" % title)
+                log("Total tokens: %s" % len(temp['Tokens']))
+                log("Total vocabulary: %s" % len(temp['Vocabulary']))
 
                 text_files.append(temp)
                 term_counter.update(temp['Tokens'])
-    # print("Loading corpus: Done!")
+
+    log("Loading corpus: Done!")
     return text_files, term_counter
 
 
@@ -44,11 +48,8 @@ def identify_vocabulary(text_files):
     for song in text_files:
         total_vocabulary |= set(song['Vocabulary'])
     total_vocabulary = list(total_vocabulary)
-    # print("Vocabulary count: {}".format(len(total_vocabulary)))
+    log("Vocabulary count: {}".format(len(total_vocabulary)))
     return total_vocabulary
-
-
-w = input("Input: ")
 
 directory = [
     "data/corpus/Joji's BALLAD Song Lyrics",
@@ -62,29 +63,21 @@ text_files, term_counter = load_corpus(directory)
 
 total_vocabulary = identify_vocabulary(text_files)
 
-# total_vocabulary2 = Counter(dict(text_files,term_counter))
-
-# print(term_counter)
-
 def P(word, N=sum(term_counter.values())):
     "Probability of `word`."
     return term_counter[word] / N
-
 
 def correction(word):
     "Most probable spelling correction for word."
     return max(candidates(word), key=P)
 
-
 def candidates(word):
     "Generate possible spelling corrections for word."
     return (known([word]) or known(edits1(word)) or [word])
 
-
 def known(words):
     "The subset of `words` that appear in the dictionary of WORDS."
     return set(w for w in words if w in total_vocabulary)
-
 
 def edits1(word):
     "All edits that are one edit away from `word`."
@@ -96,19 +89,25 @@ def edits1(word):
     inserts = [L + c + R for L, R in splits for c in letters]
     return set(deletes + transposes + replaces + inserts)
 
-
 # def edits2(word):
 #     "All edits that are two edits away from `word`."
 #     return (e2 for e1 in edits1(word) for e2 in edits1(e1))
 
+input_word = input("Input: ")
 print("Output: ")
 
-if w in total_vocabulary:
+if input_word in total_vocabulary:
     print("No error")
 else:
-    for word in candidates(w):
-        print(word)
-        print(P(word))
-    print(correction(w))
+    candidates_probabilities = []
+    for word in candidates(input_word):
+        candidates_probabilities.append({
+            "word": word,
+            "probability": P(word)
+        })
+    
+    candidates_probabilities = sorted(candidates_probabilities, key=lambda k: 1-k['probability'])
+    for candidate in candidates_probabilities:
+        print("{}: {}".format(candidate["word"], candidate["probability"]))
 
 
