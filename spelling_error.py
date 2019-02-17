@@ -56,7 +56,8 @@ directory = [
     "data/corpus/Duturte's Speeches",
     "data/corpus/DLSU Student Publications",
     "data/corpus/Journal Articles",
-    "data/corpus/LSCS"
+    "data/corpus/LSCS",
+	"data/corpus/MASC"
 ]
 
 text_files, term_counter = load_corpus(directory)
