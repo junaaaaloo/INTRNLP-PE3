@@ -107,8 +107,7 @@ if w in total_vocabulary:
     print("No error")
 else:
     for word in candidates(w):
-        print(word)
-        print(P(word))
-    print(correction(w))
+        print(word, P(word))
+    print("Corrected Word:", correction(w))
 
 
