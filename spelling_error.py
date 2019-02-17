@@ -107,6 +107,7 @@ else:
         })
     
     candidates_probabilities = sorted(candidates_probabilities, key=lambda k: 1-k['probability'])
+    print(correction(input_word) + "")
     for candidate in candidates_probabilities:
         print("{}: {}".format(candidate["word"], candidate["probability"]))
 
