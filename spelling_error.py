@@ -103,7 +103,7 @@ def correction(word):
 
 def candidates(word):
     "Generate possible spelling corrections for word."
-    return (known([{'word': word, 'error_probability': 0}]) or known(edits1(word))) or [word]
+    return (known([{'word': word, 'error_probability': 0}]) or known(edits1(word))) or [{'word': word, 'error_probability': 0}]
 
 def known(words):
     "The subset of `words` that appear in the dictionary of WORDS."
@@ -123,10 +123,10 @@ def edits1(word):
     letters = 'abcdefghijklmnopqrstuvwxyz'
 
     splits = [(word[:i], word[i:]) for i in range(len(word) + 1)]
-    deletes = [{'word': L + R[1:], 'error_probability': find_matrix(R[0], ' ')} for L, R in splits if R]
+    deletes = [{'word': L + R[1:], 'error_probability': find_matrix(L[-1:] + R[0], L[-1:])} for L, R in splits if R]
     transposes = [{'word': L + R[1] + R[0] + R[2:], 'error_probability': find_matrix(R[0] + R[1], R[1] + R[0])} for L, R in splits if len(R) > 1]
     replaces = [{'word': L + c + R[1:], 'error_probability': find_matrix(R[0], c)} for L, R in splits if R for c in letters]
-    inserts = [{'word': L + c + R, 'error_probability': find_matrix(' ', c)} for L, R in splits for c in letters]
+    inserts = [{'word': L + c + R, 'error_probability': find_matrix(L[-1:], L[-1:] + c)} for L, R in splits for c in letters]
     return list(deletes + transposes + replaces + inserts)
 
 # def edits2(word):
@@ -214,7 +214,7 @@ def press(event):
         message = ""
 
         for candidate in candidates_probabilities:
-            message += ("{}{} ({}%)\n".format("" if count != 0 else "*", candidate["word"], candidate["error_probability"] * candidate["word_probability"]))
+            message += ("{}{} ({})\n".format("" if count != 0 else "*", candidate["word"], candidate["error_probability"] * candidate["word_probability"]))
             count += 1
 
         text2.insert(1.0, message)
@@ -224,7 +224,7 @@ def press(event):
         message = ""
 
         for candidate in candidates_probabilities:
-            message += ("{}{} ({}%)\n".format("" if count != 0 else "*", candidate["word"], candidate["error_probability"]))
+            message += ("{}{} ({})\n".format("" if count != 0 else "*", candidate["word"], candidate["error_probability"]))
             count += 1
         
         text3.insert(1.0, message)
@@ -234,7 +234,7 @@ def press(event):
         message = ""
 
         for candidate in candidates_probabilities:
-            message += ("{}{} ({}%)\n".format("" if count != 0 else "*", candidate["word"], candidate["word_probability"]))
+            message += ("{}{} ({})\n".format("" if count != 0 else "*", candidate["word"], candidate["word_probability"]))
             count += 1
         text4.insert(1.0, message)
         
