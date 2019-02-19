@@ -58,14 +58,14 @@ def load_matrix (matrix_directory):
         mistake, correct = attr[0].split("|")
         count = int(attr[1])
         
-        if (mistake in matrix):
-            if (correct in matrix[mistake]):
-                matrix[mistake][correct] = count;
+        if (correct in matrix):
+            if (mistake in matrix[correct]):
+                matrix[correct][mistake] = count;
             else:
-                matrix[mistake].update({correct: count})
+                matrix[correct].update({mistake: count})
         else:
-            matrix[mistake] = {
-                correct: count
+            matrix[correct] = {
+                mistake: count
             }
         
     return matrix
@@ -109,12 +109,12 @@ def known(words):
     "The subset of `words` that appear in the dictionary of WORDS."
     return list(w for w in words if w['word'] in total_vocabulary)
 
-def find_matrix (x, y):
+def find_matrix (mistake, correct):
     global matrix
 
-    if (x in matrix):
-        if (y in matrix[x]):
-            return matrix[x][y]/sum([matrix[x][i] for i in matrix[x]])
+    if (correct in matrix):
+        if (mistake in matrix[correct]):
+            return matrix[correct][mistake]/sum([matrix[correct][i] for i in matrix[correct]])
             
     return 0
 
@@ -153,6 +153,7 @@ def edits1(word):
 #         count += 1
 
 
+print(""[-1:])
 root = tk.Tk()
 root.resizable(False, False)
 root.title("INTRNLP - PE#3")
