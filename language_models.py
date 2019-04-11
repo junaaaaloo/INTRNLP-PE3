@@ -6,11 +6,11 @@ import os
 print("Loading corpus...")
 re_pattern = r'\b[a-zA-Z0-9\-\'\*]+\b|[\.\?\!]'
 directory = [
-	#"corpus/Joji's BALLAD Song Lyrics",
-	#"corpus/Duturte's Speeches",
-	#"corpus/DLSU Student Publications",
-	#"corpus/Journal Articles"
-	"corpus/LSCS"
+	#"data/corpus/Joji's BALLAD Song Lyrics",
+	#"data/corpus/Duturte's Speeches",
+	#"data/corpus/DLSU Student Publications",
+	#"data/corpus/Journal Articles"
+	"data/corpus/LSCS"
 ]
 text_files = []
 term_counter = Counter()

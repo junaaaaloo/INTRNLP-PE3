@@ -120,7 +120,7 @@ def find_matrix (mistake, correct):
 
 def edits1(word):
     "All edits that are one edit away from `word`."
-    letters = 'abcdefghijklmnopqrstuvwxyz'
+    letters = 'abcdefghijklmnopqrstuvwxyz- '
 
     splits = [(word[:i], word[i:]) for i in range(len(word) + 1)]
     deletes = [{'word': L + R[1:], 'error_probability': find_matrix(L[-1:] + R[0], L[-1:])} for L, R in splits if R]
